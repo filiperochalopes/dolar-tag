@@ -26,7 +26,7 @@ def adicionar_registro(request):
             registro.save()
 
             for tag in tags:
-                if tag.nome is not None and tag.nome != '':
+                if tag is not None and tag != '':
                     try:
                         novaTag = Tag()
                         novaTag.nome = tag
