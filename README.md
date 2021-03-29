@@ -3,7 +3,7 @@
 ## Iniciando projeto
 ```sh
 # Para rodar o pyenv, disponibilizando-o no shell
-source ~/.bashrc
+source ~/.bashrc # Python 3.9.2
 python manage.py runserver 0.0.0.0:8000
 ```
 
