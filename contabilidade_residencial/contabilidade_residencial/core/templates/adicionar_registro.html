@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block content %}
+<section>
+    {% if mensagem %}
+        <div class="mensagem" style="background-color: {{cor}}">{{mensagem}}</div>
+    {% endif %}
+    <h2>Adicionar Registro</h2>
+    <section id="adicionar_registro">
+        <form method="post">
+            {% csrf_token %}
+            <select name="pessoa_id" id="pessoa" required>
+                <option value="">Selecione uma Pessoa</option>
+                {% for pessoa in pessoas %}
+                <option value="{{pessoa.id}}">{{pessoa.nome}} [{{pessoa.email}}]</option>
+                {% endfor %}
+            </select>
+            <select name="banco_id" id="banco" disabled required>
+                <option value="">Selecione um Banco</option>
+            </select>
+            <label for="data">Data</label>
+            <input type="date" name="data" id="data" value="{% now "Y-m-d" %}" required />
+            <label for="valor">Valor</label>
+            <input type="number" step="0.01" name="valor" id="valor" required />
+            <label for="descricao">Descrição</label>
+            <textarea name="descricao" id="descricao"></textarea>
+            <label for="descricao"></label>
+            {% for i in 12345|make_list %}
+            <label for="tag_{{i}}">Tag {{i}}</label>
+            <input type="text" name="tags[]" id="tag_{{i}}" />
+            {% endfor %}
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+</section>
+{% endblock content %}

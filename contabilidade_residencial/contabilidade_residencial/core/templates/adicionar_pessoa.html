@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% block content %}
+<section>
+    {% if mensagem %}
+        <div class="mensagem" style="background-color: {{cor}}">{{mensagem}}</div>
+    {% endif %}
+    <h2>Adicionar Pessoa</h2>
+    <section id="adicionar_pessoa">
+        <form method="post">
+            {% csrf_token %}
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" required />
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" required />
+            <fieldset>
+                <legend>Propriedades</legend>
+                <div class="campos_propriedade">
+                    <label for="propriedades_chave_1">Chave</label>
+                    <input type="text" name="propriedades_chave[]" id="propriedades_chave_1" />
+                    <label for="propriedades_valor_1">Valor</label>
+                    <input type="text" name="propriedades_valor[]" id="propriedades_valor_1" />
+                </div>
+                <div id="propriedades_adicionais"></div>
+                <button type="button">Adicionar Propriedade</button>
+            </fieldset>
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+</section>
+{% endblock content %}

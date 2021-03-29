@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+<section>
+    <h2>Registros</h2>
+    <section id="registros">
+        {% for registro in registros %}
+        <div class="item">
+            {{registro.valor}} <a href="?delete={{registro.id}}">[Delete]</a> <a
+                href="editar-registro?id={{registro.id}}">[Editar]</a></br>
+            Descrição: {{registro.descricao}}</br>
+            Tags: {% for tag in registro.tags.all %} {{tag.nome}}; {% endfor %}
+        </div>
+        {% endfor %}
+    </section>
+</section>
+{% endblock content %}
