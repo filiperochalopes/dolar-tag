@@ -80,6 +80,21 @@ main {
     }
 }
 
+#registros{
+    span{
+        padding: 2px 5px;
+        border-radius: 10px;
+
+        &.negativo{
+            background-color: red;
+        }
+
+        &.positivo{
+            background-color: green;
+        }
+    }
+}
+
 footer {
     background-color: #e2e2e2;
     position: absolute;

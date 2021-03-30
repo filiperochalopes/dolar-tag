@@ -12,3 +12,9 @@ python manage.py runserver 0.0.0.0:8000
 # Criar migration atualizada com base nas classes
 python manage.py makemigrations
 ```
+
+## To watch/compile sass
+```sh
+python manage.py sass contabilidade_residencial/core/static/scss/ contabilidade_residencial/core/static/css/ --watch
+python manage.py sass contabilidade_residencial/core/static/scss/ contabilidade_residencial/core/static/css/ -t compressed
+```

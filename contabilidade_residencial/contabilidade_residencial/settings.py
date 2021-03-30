@@ -9,12 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 
-To run app
-python mage.py runserver 0.0.0.0:8000
-
-To watch/compile sass
-python manage.py sass contabilidade_residencial/core/static/scss/ contabilidade_residencial/core/static/css/ --watch
-python manage.py sass contabilidade_residencial/core/static/scss/ contabilidade_residencial/core/static/css/ -t compressed
 """
 
 from pathlib import Path
