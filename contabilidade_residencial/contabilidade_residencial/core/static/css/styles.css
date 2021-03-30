@@ -75,6 +75,19 @@ main > section > section .item {
   border-radius: 3px;
 }
 
+#registros span {
+  padding: 2px 5px;
+  border-radius: 10px;
+}
+
+#registros span.negativo {
+  background-color: red;
+}
+
+#registros span.positivo {
+  background-color: green;
+}
+
 footer {
   background-color: #e2e2e2;
   position: absolute;

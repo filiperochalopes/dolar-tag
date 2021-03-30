@@ -4,10 +4,10 @@
     <section id="registros">
         {% for registro in registros %}
         <div class="item">
-            {{registro.data}} {{registro.valor}} <a href="?delete={{registro.id}}">[Delete]</a> <a
+            {{registro.data|date:'d/m/Y'}} > <span class="valor {% if registro.valor <= 0 %}negativo{% else %}positivo{% endif %}">{{registro.valor}}</span> <a href="?delete={{registro.id}}">[Delete]</a> <a
                 href="editar-registro?id={{registro.id}}">[Editar]</a></br>
             Descrição: {{registro.descricao}}</br>
-            Tags: {% for tag in registro.tags.all %} {{tag.nome}}; {% endfor %}
+            Tags: {% for tag in registro.tags.all %} <span style="background: #{{tag.cor_hex}}">{{tag.nome}}</span> {% endfor %}
             Atualizado em {{registro.atualizado_em}}
         </div>
         {% endfor %}
