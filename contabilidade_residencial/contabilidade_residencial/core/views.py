@@ -5,7 +5,7 @@ from .models import Pessoa, PropriedadePessoa, Banco, Registro, Tag
 
 
 def registros(request):
-    registros = Registro.objects.all()
+    registros = Registro.objects.order_by('-data').all()
     return render(request, 'registros.html', {'registros': registros})
 
 
