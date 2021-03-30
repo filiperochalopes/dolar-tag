@@ -20,6 +20,7 @@ def adicionar_registro(request):
             banco = Banco.objects.get(id=request.POST.get('banco_id'))
             registro.pessoa = pessoa
             registro.banco = banco
+            registro.data = request.POST.get('data')
             registro.valor = request.POST.get('valor')
             registro.descricao = request.POST.get('descricao')
             tags = request.POST.getlist('tags[]')
@@ -52,7 +53,50 @@ def adicionar_registro(request):
 
 
 def editar_registro(request):
-    return render(request, 'editar_registro.html')
+    mensagem = None
+    cor = None
+    pessoas = Pessoa.objects.all()
+    registro = Registro.objects.get(id=request.GET.get('id'))
+    bancos = Banco.objects.filter(pessoa=registro.pessoa).all()
+    if request.method == 'POST':
+        try:
+            pessoa = Pessoa.objects.get(id=request.POST.get('pessoa_id'))
+            banco = Banco.objects.get(id=request.POST.get('banco_id'))
+            registro.pessoa = pessoa
+            registro.banco = banco
+            registro.data = request.POST.get('data')
+            registro.valor = request.POST.get('valor')
+            registro.descricao = request.POST.get('descricao')
+            tags = request.POST.getlist('tags[]')
+            registro.save()
+
+            for tag in registro.tags.all():
+                if tag not in tags:
+                    registro.tags.remove(tag)
+
+            for tag in tags:
+                if tag is not None and tag != '':
+                    try:
+                        novaTag = Tag()
+                        novaTag.nome = tag
+                        novaTag.cor_hex = 'cccccc'
+                        novaTag.save()
+                        registro.tags.add(novaTag)
+                    except:
+                        try:
+                            tagExistente = Tag.objects.get(nome=tag)
+                            registro.tags.add(tagExistente)
+                        except Exception as e:
+                            mensagem = f"Erro ao atualizar tags: {e}"
+                            cor = "#e52222"
+
+            mensagem = "Atualizado com sucesso!"
+            cor = "#7ee534"
+        except Exception as e:
+            mensagem = f"Erro ao atualizar: {e}"
+            cor = "#e52222"
+
+    return render(request, 'editar_registro.html', {'mensagem': mensagem, 'cor': cor, 'pessoas': pessoas, 'registro': registro, 'bancos': bancos})
 
 
 def pessoas(request):

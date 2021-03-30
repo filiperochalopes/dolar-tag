@@ -28,4 +28,21 @@ $(document).ready(function () {
       });
     });
   });
+
+  /** --------- EDITAR REGISTRO ---------- */
+  $("#editar_registro #pessoa").change(function (e) {
+    $.get(`api/banco?pessoa_id=${e.target.value}`, (data) => {
+      const bancos = JSON.parse(data)
+      $("#editar_registro #banco").attr("disabled", false);
+      $("#editar_registro #banco").html(
+        '<option value="">Selecione um Banco</option>'
+      );
+      console.log(bancos);
+      bancos.forEach((banco) => {
+        $("#editar_registro #banco").append(
+          `<option value="${banco.pk}">${banco.fields.apelido}</option>`
+        );
+      });
+    });
+  });
 });
