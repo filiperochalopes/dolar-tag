@@ -1,4 +1,20 @@
-$(document).ready(function () {
+function getCookie(c_name)
+{
+    if (document.cookie.length > 0)
+    {
+        c_start = document.cookie.indexOf(c_name + "=");
+        if (c_start != -1)
+        {
+            c_start = c_start + c_name.length + 1;
+            c_end = document.cookie.indexOf(";", c_start);
+            if (c_end == -1) c_end = document.cookie.length;
+            return unescape(document.cookie.substring(c_start,c_end));
+        }
+    }
+    return "";
+ }
+ 
+ $(document).ready(function () {
   /** --------- ADICIONAR PESSOA ---------- */
   let adicionar_pessoa_propriedades_id = 1;
   $("#adicionar_pessoa form button[type=button]").click(function (e) {
@@ -15,7 +31,7 @@ $(document).ready(function () {
   /** --------- ADICIONAR REGISTRO ---------- */
   $("#adicionar_registro #pessoa").change(function (e) {
     $.get(`api/banco?pessoa_id=${e.target.value}`, (data) => {
-      const bancos = JSON.parse(data)
+      const bancos = JSON.parse(data);
       $("#adicionar_registro #banco").attr("disabled", false);
       $("#adicionar_registro #banco").html(
         '<option value="">Selecione um Banco</option>'
@@ -32,7 +48,7 @@ $(document).ready(function () {
   /** --------- EDITAR REGISTRO ---------- */
   $("#editar_registro #pessoa").change(function (e) {
     $.get(`api/banco?pessoa_id=${e.target.value}`, (data) => {
-      const bancos = JSON.parse(data)
+      const bancos = JSON.parse(data);
       $("#editar_registro #banco").attr("disabled", false);
       $("#editar_registro #banco").html(
         '<option value="">Selecione um Banco</option>'
@@ -44,5 +60,20 @@ $(document).ready(function () {
         );
       });
     });
+  });
+
+  /** --------- EXCLUIR REGISTRO ---------- */
+  $("button.excluir_registro").click(function (e) {
+    if (confirm("Tem certeza que deseja excluir esse registro?")) {
+      const id = $(this).data("id");
+      $.ajax({
+        url: `/api/registro/${id}`,
+        type: "DELETE",
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function () {
+          window.location.reload()
+        },
+      });
+    }
   });
 });

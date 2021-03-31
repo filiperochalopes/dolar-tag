@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core import serializers
 from django.http import JsonResponse
 from .models import Pessoa, PropriedadePessoa, Banco, Registro, Tag
+from django.views.decorators.csrf import csrf_exempt
 
 
 def registros(request):
@@ -194,4 +195,14 @@ def rest_banco(request):
     pessoa = Pessoa.objects.get(id=request.GET.get('pessoa_id'))
     bancos = Banco.objects.filter(pessoa=pessoa)
     serialized_query = serializers.serialize('json', bancos)
+    return JsonResponse(serialized_query, safe=False)
+
+
+def rest_registro(request, id):
+    registro = None
+    if(request.method == 'DELETE'):
+        print(f'Excluindo Registro {id}')
+        registro = Registro.objects.filter(id=30)
+        serialized_query = serializers.serialize('json', registro)
+        registro.delete()
     return JsonResponse(serialized_query, safe=False)

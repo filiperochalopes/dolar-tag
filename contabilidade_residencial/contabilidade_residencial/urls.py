@@ -30,4 +30,5 @@ urlpatterns = [
     path('tags', views.tags),
     path('admin/', admin.site.urls),
     path('api/banco', views.rest_banco),
+    path('api/registro/<int:id>', views.rest_registro),
 ]
