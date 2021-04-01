@@ -1,20 +1,17 @@
-function getCookie(c_name)
-{
-    if (document.cookie.length > 0)
-    {
-        c_start = document.cookie.indexOf(c_name + "=");
-        if (c_start != -1)
-        {
-            c_start = c_start + c_name.length + 1;
-            c_end = document.cookie.indexOf(";", c_start);
-            if (c_end == -1) c_end = document.cookie.length;
-            return unescape(document.cookie.substring(c_start,c_end));
-        }
+function getCookie(c_name) {
+  if (document.cookie.length > 0) {
+    c_start = document.cookie.indexOf(c_name + "=");
+    if (c_start != -1) {
+      c_start = c_start + c_name.length + 1;
+      c_end = document.cookie.indexOf(";", c_start);
+      if (c_end == -1) c_end = document.cookie.length;
+      return unescape(document.cookie.substring(c_start, c_end));
     }
-    return "";
- }
- 
- $(document).ready(function () {
+  }
+  return "";
+}
+
+$(document).ready(function () {
   /** --------- ADICIONAR PESSOA ---------- */
   let adicionar_pessoa_propriedades_id = 1;
   $("#adicionar_pessoa form button[type=button]").click(function (e) {
@@ -71,9 +68,20 @@ function getCookie(c_name)
         type: "DELETE",
         headers: { "X-CSRFToken": getCookie("csrftoken") },
         success: function () {
-          window.location.reload()
+          window.location.reload();
         },
       });
     }
+  });
+
+  /** --------- FILTRAR REGISTRO ---------- */
+  $("input[type=checkbox].pessoa_filtro").change(function () {
+    const pessoaId = $(this).data("pessoa-id"),
+      checked = $(this).is(":checked");
+      console.log(pessoaId, checked)
+    $(`input[type=checkbox].banco_filtro.pessoa_${pessoaId}`).prop(
+      "checked",
+      checked
+    );
   });
 });

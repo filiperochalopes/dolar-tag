@@ -3,11 +3,58 @@ from django.core import serializers
 from django.http import JsonResponse
 from .models import Pessoa, PropriedadePessoa, Banco, Registro, Tag
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
+import re
 
 
 def registros(request):
-    registros = Registro.objects.order_by('-data').all()
-    return render(request, 'registros.html', {'registros': registros})
+    registros = Registro.objects
+    pessoas = Pessoa.objects.all()
+
+    # Elementos de filtragem
+    pesquisa = request.GET.get('q') or ""
+    debito = bool(request.GET.get('debito')) or True
+    credito = bool(request.GET.get('credito')) or True
+    bancos = request.GET.getlist('banco[]') or None
+
+    dates = re.findall("\d{1,2}\/\d{1,2}\/\d{2,4}", pesquisa)
+    if(len(dates) == 2):
+        registros = registros.filter(data__range=[datetime.strptime(
+            dates[0], '%d/%m/%Y').strftime('%Y-%m-%d'), datetime.strptime(
+            dates[1], '%d/%m/%Y').strftime('%Y-%m-%d')])
+    elif(len(dates) == 1):
+        registros = registros.filter(data=datetime.strptime(
+            dates[0], '%d/%m/%Y').strftime('%Y-%m-%d'))
+
+    pesquisa = re.sub("\d{1,2}\/\d{1,2}\/\d{2,4}", "", pesquisa)
+
+    busca_like = re.search("\".+\"", pesquisa)
+    if(busca_like):
+        busca_like = re.sub("\"", "", busca_like[0])
+        registros = registros.filter(descricao__icontains=busca_like)
+
+    pesquisa = re.sub("\".+\"", "", pesquisa)
+
+    if(bancos):
+        registros = registros.filter(banco_id__in=bancos)
+
+    if(credito and not debito):
+        registros = registros.filter(valor__gt=0)
+
+    if(debito and not credito):
+        registros = registros.filter(valor__lt=0)
+
+    tags = re.findall("\w+", pesquisa)
+
+    if(len(tags)):
+        registros = registros.filter(tags__nome__in=tags)
+
+    registros = registros.order_by('-data').all()
+
+    for pessoa in pessoas:
+        bancos = Banco.objects.filter(pessoa=pessoa)
+        pessoa.bancos = bancos
+    return render(request, 'registros.html', {'registros': registros, 'pessoas': pessoas})
 
 
 def adicionar_registro(request):

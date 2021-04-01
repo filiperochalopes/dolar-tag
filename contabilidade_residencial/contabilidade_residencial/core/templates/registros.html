@@ -1,6 +1,27 @@
 {% extends "base.html" %} {% block content %}
 <section>
     <h2>Registros</h2>
+    <div id="filtro_registro">
+        <form>
+            <input placeholder="Pesquisa" name="q" />
+            <input type="checkbox" name="credito" id="checkbox_credito" checked/> <label for="checkbox_credito">Crédito</label>
+            <input type="checkbox" name="debito" id="checkbox_debito" checked/> <label for="checkbox_debito">Débito</label>
+            <div id="filtro_banco">
+                {% for pessoa in pessoas %}
+                <ul>
+                    <li><input type="checkbox" class="pessoa_filtro" data-pessoa-id="{{pessoa.id}}" checked/> {{pessoa.nome}}
+                        <ul>
+                        {% for banco in pessoa.bancos %}
+                            <li><input type="checkbox" class="banco_filtro pessoa_{{pessoa.id}}" name="banco[]" value="{{banco.id}}" checked/> {{banco.apelido}} - {{banco.nome}}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+                {% endfor %}
+            </div>
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
     <section id="registros">
         {% for registro in registros %}
         <div class="item">
