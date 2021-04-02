@@ -25,7 +25,7 @@
     <section id="registros">
         {% for registro in registros %}
         <div class="item">
-            {{registro.data|date:'d/m/Y'}} > <span class="valor {% if registro.valor <= 0 %}negativo{% else %}positivo{% endif %}">{{registro.valor}}</span> <button class="excluir_registro a" data-id="{{registro.id}}">[Delete]</button> <a
+            @{{registro.id}} - {{registro.data|date:'d/m/Y'}} > <span class="valor {% if registro.valor <= 0 %}negativo{% else %}positivo{% endif %}">{{registro.valor}}</span> <button class="excluir_registro a" data-id="{{registro.id}}">[Delete]</button> <a
                 href="editar-registro?id={{registro.id}}">[Editar]</a></br>
             Descrição: {{registro.descricao}}</br>
             Tags: {% for tag in registro.tags.all %} <span style="background: #{{tag.cor_hex}}">{{tag.nome}}</span> {% endfor %}
