@@ -3,6 +3,7 @@ from django.core import serializers
 from django.http import JsonResponse
 from .models import Pessoa, PropriedadePessoa, Banco, Registro, Tag
 from django.views.decorators.csrf import csrf_exempt
+from functools import reduce
 from datetime import datetime
 import re
 
@@ -49,12 +50,28 @@ def registros(request):
     if(len(tags)):
         registros = registros.filter(tags__nome__in=tags)
 
+    # Mostrando todos os registros filtrados em ordem de data
     registros = registros.order_by('-data').all()
+
+    # Calculando os valores totais de balanço
+    creditos = reduce(lambda accumulated,current: accumulated+current.valor if current.valor > 0 else accumulated, registros, 0)
+    debitos = reduce(lambda accumulated,current: accumulated+current.valor if current.valor < 0 else accumulated, registros, 0)
+    balanco = reduce(lambda accumulated,current: accumulated+current.valor, registros, 0)
+    print(creditos, debitos, balanco)
 
     for pessoa in pessoas:
         bancos = Banco.objects.filter(pessoa=pessoa)
         pessoa.bancos = bancos
-    return render(request, 'registros.html', {'registros': registros, 'pessoas': pessoas})
+
+    return render(request, 'registros.html', {
+        'registros': registros, 
+        'pessoas': pessoas,
+        'analise': {
+            'creditos': creditos,
+            'debitos': debitos,
+            'balanco': balanco
+        }
+        })
 
 
 def adicionar_registro(request):

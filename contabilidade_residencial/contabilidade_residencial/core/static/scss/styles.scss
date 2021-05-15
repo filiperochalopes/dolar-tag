@@ -102,6 +102,24 @@ main {
     }
 }
 
+#analise_registros {
+    h2 {
+        color: green;
+
+        &.negativo {
+            color: red;
+        }
+
+        span {
+            font-size: 12px;
+            
+            &:first-child {
+                color: green;
+            }
+        }
+    }
+}
+
 footer {
     background-color: #e2e2e2;
     position: absolute;

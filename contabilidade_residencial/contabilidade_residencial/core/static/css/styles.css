@@ -93,6 +93,22 @@ main > section > section .item {
   display: inline;
 }
 
+#analise_registros h2 {
+  color: green;
+}
+
+#analise_registros h2.negativo {
+  color: red;
+}
+
+#analise_registros h2 span {
+  font-size: 12px;
+}
+
+#analise_registros h2 span:first-child {
+  color: green;
+}
+
 footer {
   background-color: #e2e2e2;
   position: absolute;

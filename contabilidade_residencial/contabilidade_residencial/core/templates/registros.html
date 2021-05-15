@@ -4,15 +4,19 @@
     <div id="filtro_registro">
         <form>
             <input placeholder="Pesquisa" name="q" />
-            <input type="checkbox" name="credito" id="checkbox_credito" checked/> <label for="checkbox_credito">Crédito</label>
-            <input type="checkbox" name="debito" id="checkbox_debito" checked/> <label for="checkbox_debito">Débito</label>
+            <input type="checkbox" name="credito" id="checkbox_credito" checked /> <label
+                for="checkbox_credito">Crédito</label>
+            <input type="checkbox" name="debito" id="checkbox_debito" checked /> <label
+                for="checkbox_debito">Débito</label>
             <div id="filtro_banco">
                 {% for pessoa in pessoas %}
                 <ul>
-                    <li><input type="checkbox" class="pessoa_filtro" data-pessoa-id="{{pessoa.id}}" checked/> {{pessoa.nome}}
+                    <li><input type="checkbox" class="pessoa_filtro" data-pessoa-id="{{pessoa.id}}" checked />
+                        {{pessoa.nome}}
                         <ul>
-                        {% for banco in pessoa.bancos %}
-                            <li><input type="checkbox" class="banco_filtro pessoa_{{pessoa.id}}" name="banco[]" value="{{banco.id}}" checked/> {{banco.apelido}} - {{banco.nome}}</li>
+                            {% for banco in pessoa.bancos %}
+                            <li><input type="checkbox" class="banco_filtro pessoa_{{pessoa.id}}" name="banco[]"
+                                    value="{{banco.id}}" checked /> {{banco.apelido}} - {{banco.nome}}</li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -22,13 +26,19 @@
             <button type="submit">Filtrar</button>
         </form>
     </div>
+    <div id="analise_registros">
+        <h2 {% if analise.balanco < 0 %}class="negativo"{% endif %}>{{analise.balanco|floatformat:2}} <span>(+{{analise.creditos|floatformat:2}})</span> <span>({{analise.debitos|floatformat:2}})</span></h2>
+    </div>
     <section id="registros">
         {% for registro in registros %}
         <div class="item">
-            @{{registro.id}} - {{registro.data|date:'d/m/Y'}} > <span class="valor {% if registro.valor <= 0 %}negativo{% else %}positivo{% endif %}">{{registro.valor}}</span> <button class="excluir_registro a" data-id="{{registro.id}}">[Delete]</button> <a
+            @{{registro.id}} - {{registro.data|date:'d/m/Y'}} > <span
+                class="valor {% if registro.valor <= 0 %}negativo{% else %}positivo{% endif %}">{{registro.valor}}</span>
+            <button class="excluir_registro a" data-id="{{registro.id}}">[Delete]</button> <a
                 href="editar-registro?id={{registro.id}}">[Editar]</a></br>
             Descrição: {{registro.descricao}}</br>
-            Tags: {% for tag in registro.tags.all %} <span style="background: #{{tag.cor_hex}}">{{tag.nome}}</span> {% endfor %}
+            Tags: {% for tag in registro.tags.all %} <span style="background: #{{tag.cor_hex}}">{{tag.nome}}</span>
+            {% endfor %}
             Atualizado em {{registro.atualizado_em}}
         </div>
         {% endfor %}
