@@ -28,6 +28,7 @@ urlpatterns = [
     path('adicionar-banco', views.adicionar_banco),
     path('editar-banco', views.editar_banco),
     path('tags', views.tags),
+    path('recorrente', views.recorrente),
     path('admin/', admin.site.urls),
     path('api/banco', views.rest_banco),
     path('api/registro/<int:id>', views.rest_registro),

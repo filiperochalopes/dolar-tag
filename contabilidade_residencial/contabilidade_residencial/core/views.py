@@ -57,7 +57,6 @@ def registros(request):
     creditos = reduce(lambda accumulated,current: accumulated+current.valor if current.valor > 0 else accumulated, registros, 0)
     debitos = reduce(lambda accumulated,current: accumulated+current.valor if current.valor < 0 else accumulated, registros, 0)
     balanco = reduce(lambda accumulated,current: accumulated+current.valor, registros, 0)
-    print(creditos, debitos, balanco)
 
     for pessoa in pessoas:
         bancos = Banco.objects.filter(pessoa=pessoa)
@@ -72,6 +71,10 @@ def registros(request):
             'balanco': balanco
         }
         })
+
+def recorrente(request):
+    registros_recorrentes = Registro.objects.filter(tags__nome='recorrente').all()
+    return render(request, 'recorrente.html', {'registros_recorrentes': registros_recorrentes})
 
 
 def adicionar_registro(request):
@@ -253,7 +256,6 @@ def editar_banco(request):
 def tags(request):
     tags = Tag.objects.all()
     return render(request, 'tags.html', {'tags': tags})
-
 
 def rest_banco(request):
     pessoa = Pessoa.objects.get(id=request.GET.get('pessoa_id'))
