@@ -112,9 +112,13 @@ main {
 
         span {
             font-size: 12px;
-            
+
             &:first-child {
                 color: green;
+            }
+
+            &:last-child {
+                color: red;
             }
         }
     }

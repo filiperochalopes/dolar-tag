@@ -8,6 +8,7 @@
                 for="checkbox_credito">Crédito</label>
             <input type="checkbox" name="debito" id="checkbox_debito" checked /> <label
                 for="checkbox_debito">Débito</label>
+            <br /><button type="button" id="filtro_registro_mes_atual">Mês Atual</button>
             <div id="filtro_banco">
                 {% for pessoa in pessoas %}
                 <ul>
@@ -27,7 +28,8 @@
         </form>
     </div>
     <div id="analise_registros">
-        <h2 {% if analise.balanco < 0 %}class="negativo"{% endif %}>{{analise.balanco|floatformat:2}} <span>(+{{analise.creditos|floatformat:2}})</span> <span>({{analise.debitos|floatformat:2}})</span></h2>
+        <h2 {% if analise.balanco < 0 %}class="negativo" {% endif %}>{{analise.balanco|floatformat:2}}
+            <span>(+{{analise.creditos|floatformat:2}})</span> <span>({{analise.debitos|floatformat:2}})</span></h2>
     </div>
     <section id="registros">
         {% for registro in registros %}

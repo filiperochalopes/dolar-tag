@@ -78,10 +78,35 @@ $(document).ready(function () {
   $("input[type=checkbox].pessoa_filtro").change(function () {
     const pessoaId = $(this).data("pessoa-id"),
       checked = $(this).is(":checked");
-      console.log(pessoaId, checked)
+    console.log(pessoaId, checked);
     $(`input[type=checkbox].banco_filtro.pessoa_${pessoaId}`).prop(
       "checked",
       checked
     );
   });
+  
+  $("#filtro_registro_mes_atual").click(function () {
+    const queryInput = $("input[name=q]");
+    let queryInputValue = queryInput.val();
+    const hoje = new Date();
+    const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const formatarData = (data) =>
+    data.getDate() + "/" + (data.getMonth() + 1) + "/" + data.getFullYear();
+    const mesAtualRange = `${
+      formatarData(primeiroDiaMes)}-${formatarData(hoje)
+    }`;
+    console.log(hoje, primeiroDiaMes)
+    if (queryInputValue.match(/\d{1,2}\/\d{1,2}\/\d{2,4}/)) {
+      // Substitui a data atual pelo mês atual
+      queryInputValue = queryInputValue.replace(
+        /\d{1,2}\/\d{1,2}\/\d{2,4}/,
+        mesAtualRange
+      );
+    } else {
+      // Apenas adiciona o mês atual
+      queryInputValue = `${queryInputValue} ${mesAtualRange}`;
+    }
+    queryInput.val(queryInputValue);
+  });
+
 });

@@ -109,6 +109,10 @@ main > section > section .item {
   color: green;
 }
 
+#analise_registros h2 span:last-child {
+  color: red;
+}
+
 footer {
   background-color: #e2e2e2;
   position: absolute;
