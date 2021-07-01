@@ -47,8 +47,9 @@ main {
             display: block;
         }
 
-        input,
-        select,
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] select,
         textarea {
             display: block;
             border-radius: 5px;
@@ -80,17 +81,45 @@ main {
     }
 }
 
-#registros{
-    span{
+#registros {
+    span {
         padding: 2px 5px;
         border-radius: 10px;
 
-        &.negativo{
+        &.negativo {
             background-color: red;
         }
 
-        &.positivo{
+        &.positivo {
             background-color: green;
+        }
+    }
+}
+
+#filtro_registro {
+    label {
+        display: inline;
+    }
+}
+
+#analise_registros {
+    h2 {
+        color: green;
+
+        &.negativo {
+            color: red;
+        }
+
+        span {
+            font-size: 12px;
+
+            &:first-child {
+                color: green;
+            }
+
+            &:last-child {
+                color: red;
+            }
         }
     }
 }

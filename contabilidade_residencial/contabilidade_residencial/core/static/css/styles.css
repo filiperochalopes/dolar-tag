@@ -44,8 +44,9 @@ main form label {
   display: block;
 }
 
-main form input,
-main form select,
+main form input[type="text"],
+main form input[type="number"],
+main form input[type="date"] select,
 main form textarea {
   display: block;
   border-radius: 5px;
@@ -86,6 +87,30 @@ main > section > section .item {
 
 #registros span.positivo {
   background-color: green;
+}
+
+#filtro_registro label {
+  display: inline;
+}
+
+#analise_registros h2 {
+  color: green;
+}
+
+#analise_registros h2.negativo {
+  color: red;
+}
+
+#analise_registros h2 span {
+  font-size: 12px;
+}
+
+#analise_registros h2 span:first-child {
+  color: green;
+}
+
+#analise_registros h2 span:last-child {
+  color: red;
 }
 
 footer {
