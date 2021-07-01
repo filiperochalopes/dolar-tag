@@ -272,3 +272,9 @@ def rest_registro(request, id):
         serialized_query = serializers.serialize('json', registro)
         registro.delete()
     return JsonResponse(serialized_query, safe=False)
+
+
+def analises(request):
+    # Mostra análise por período, por padrão vem o mes atual depois vem a lista de consumos dos 5 últimos meses em evolução gráfica
+    tags = Tag.objects.all()
+    return render(request, 'analises.html', {'tags': tags})
