@@ -1,14 +1,32 @@
 {% extends "base.html" %} {% block content %}
 <section>
-    <h2>Tags</h2>
-    <section id="tags">
-        {% for tag in tags %}
+    <h2>Análises</h2>
+    <section id="analises">
+        <input type="search" placeholder="Digite um intervalo de datas">
+        {% for registro in registros %}
         <div class="item">
-            {{tag.nome}} <a
-                href="editar-registro?id={{registro.id}}">[Editar]</a></br>
-            Descrição: {{tag.descricao}}</br>
+            <h3>{{registro.periodo.data_inicial}} - {{registro.periodo.data_final}}</h3>
+            <div class="analise_registros">
+                <h2 {% if registro.analise.balanco < 0 %}class="negativo" {% endif %}>
+                    {{registro.analise.balanco|floatformat:2}}
+                    <span>(+{{registro.analise.creditos|floatformat:2}})</span>
+                    <span>({{registro.analise.debitos|floatformat:2}})</span></h2>
+                Salários: {{registro.analise.salarios|floatformat:2}}
+                <ul>
+                    <li>Embasa/Água: {{registro.analise.agua|floatformat:2}}</li>
+                    <li>Coelba/Luz: {{registro.analise.luz|floatformat:2}}</li>
+                    <li>Alimentação: {{registro.analise.alimentacao|floatformat:2}}</li>
+                    <li>Transporte: {{registro.analise.transporte|floatformat:2}}</li>
+                    <li>Assinaturas/Streaming: {{registro.analise.assinaturas|floatformat:2}}</li>
+                    <li>Casa: {{registro.analise.casa|floatformat:2}}</li>
+                    <li>Saúde: {{registro.analise.saude|floatformat:2}}</li>
+                    <li>Estudo: {{registro.analise.estudo|floatformat:2}}</li>
+                    <li>Outros: {{registro.analise.outros|floatformat:2}}</li>
+                </ul>
+            </div>
         </div>
         {% endfor %}
+        <!-- Gráfico de barras com distribuição de gastos em tags -->
     </section>
 </section>
 {% endblock content %}

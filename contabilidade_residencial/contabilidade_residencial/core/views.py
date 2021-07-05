@@ -1,3 +1,5 @@
+from django.db.models import Q
+import calendar
 from django.shortcuts import render
 from django.core import serializers
 from django.http import JsonResponse
@@ -54,26 +56,31 @@ def registros(request):
     registros = registros.order_by('-data').all()
 
     # Calculando os valores totais de balanço
-    creditos = reduce(lambda accumulated,current: accumulated+current.valor if current.valor > 0 else accumulated, registros, 0)
-    debitos = reduce(lambda accumulated,current: accumulated+current.valor if current.valor < 0 else accumulated, registros, 0)
-    balanco = reduce(lambda accumulated,current: accumulated+current.valor, registros, 0)
+    creditos = reduce(lambda accumulated, current: accumulated +
+                      current.valor if current.valor > 0 else accumulated, registros, 0)
+    debitos = reduce(lambda accumulated, current: accumulated +
+                     current.valor if current.valor < 0 else accumulated, registros, 0)
+    balanco = reduce(lambda accumulated, current: accumulated +
+                     current.valor, registros, 0)
 
     for pessoa in pessoas:
         bancos = Banco.objects.filter(pessoa=pessoa)
         pessoa.bancos = bancos
 
     return render(request, 'registros.html', {
-        'registros': registros, 
+        'registros': registros,
         'pessoas': pessoas,
         'analise': {
             'creditos': creditos,
             'debitos': debitos,
             'balanco': balanco
         }
-        })
+    })
+
 
 def recorrente(request):
-    registros_recorrentes = Registro.objects.filter(tags__nome='recorrente').all()
+    registros_recorrentes = Registro.objects.filter(
+        tags__nome='recorrente').all()
     return render(request, 'recorrente.html', {'registros_recorrentes': registros_recorrentes})
 
 
@@ -257,6 +264,7 @@ def tags(request):
     tags = Tag.objects.all()
     return render(request, 'tags.html', {'tags': tags})
 
+
 def rest_banco(request):
     pessoa = Pessoa.objects.get(id=request.GET.get('pessoa_id'))
     bancos = Banco.objects.filter(pessoa=pessoa)
@@ -274,7 +282,129 @@ def rest_registro(request, id):
     return JsonResponse(serialized_query, safe=False)
 
 
+def get_registros(data_inicial, data_final, lista_include_tags=[], lista_exclude_tags=[]):
+    registros = Registro.objects.filter(
+        ~Q(pessoa__nome='ORANGO I/O TECNOLOGIA'))
+    if data_inicial:
+        registros = registros.filter(data__gte=data_inicial)
+    if data_final:
+        registros = registros.filter(data__lte=data_final)
+    for tag in lista_include_tags:
+        registros = registros.filter(tags__nome=tag)
+    for tag in lista_exclude_tags:
+        registros = registros.filter(~Q(tags__nome=tag))
+    registros = registros.all()
+    return registros
+
+
+def get_dados_analises(data_inicial, data_final, lista_tags):
+    print('=========== get_dados_analises ==========')
+
+    # Registros gerais, calculando os valores totais de balanço
+    registros = get_registros(data_inicial, data_final)
+    creditos = reduce(lambda accumulated, current: accumulated +
+                      current.valor if current.valor > 0 else accumulated, registros, 0)
+    debitos = reduce(lambda accumulated, current: accumulated +
+                     current.valor if current.valor < 0 else accumulated, registros, 0)
+    balanco = reduce(lambda accumulated, current: accumulated +
+                     current.valor, registros, 0)
+    # Registros de salario
+    registros = get_registros(data_inicial, data_final, ['salario'])
+    salarios = reduce(lambda accumulated, current: accumulated +
+                         current.valor, registros, 0)
+    # Registros de água
+    registros = get_registros(data_inicial, data_final, ['embasa'])
+    gastos_agua = reduce(lambda accumulated, current: accumulated +
+                         current.valor, registros, 0)
+    # Registros de luz
+    registros = get_registros(data_inicial, data_final, ['coelba'])
+    gastos_luz = reduce(lambda accumulated, current: accumulated +
+                        current.valor, registros, 0)
+    # Registros de alimentacao
+    registros = get_registros(data_inicial, data_final, ['alimentacao'])
+    gastos_alimentacao = reduce(
+        lambda accumulated, current: accumulated + current.valor, registros, 0)
+    # Registros de transporte
+    registros = get_registros(data_inicial, data_final, ['transporte'])
+    gastos_transporte = reduce(
+        lambda accumulated, current: accumulated + current.valor, registros, 0)
+    # Registros de assinaturas
+    registros = get_registros(data_inicial, data_final, ['assinatura'])
+    gastos_assinaturas = reduce(lambda accumulated, current: accumulated +
+                                current.valor, registros, 0)
+    # Registros de casa
+    registros = get_registros(data_inicial, data_final, ['casa'])
+    gastos_casa = reduce(lambda accumulated, current: accumulated +
+                         current.valor, registros, 0)
+    # Registros de saude
+    registros = get_registros(data_inicial, data_final, ['saude'])
+    gastos_saude = reduce(lambda accumulated, current: accumulated +
+                          current.valor, registros, 0)
+    # Registros de estudo
+    registros = get_registros(data_inicial, data_final, ['estudo'])
+    gastos_estudo = reduce(lambda accumulated, current: accumulated +
+                           current.valor, registros, 0)
+    # Registros de estudo
+    registros = get_registros(data_inicial, data_final, [], [
+                              'embasa', 'coelba', 'alimentacao', 'assinatura', 'casa', 'saude', 'estudo', 'transporte'])
+    gastos_outros = reduce(lambda accumulated, current: accumulated +
+                           current.valor, registros, 0)
+
+    return {
+        'salarios': salarios,
+        'agua': gastos_agua,
+        'luz': gastos_luz,
+        'alimentacao': gastos_alimentacao,
+        'transporte': gastos_transporte,
+        'assinaturas': gastos_assinaturas,
+        'casa': gastos_casa,
+        'saude': gastos_saude,
+        'estudo': gastos_estudo,
+        'outros': gastos_outros,
+        'creditos': creditos,
+        'debitos': debitos,
+        'balanco': balanco
+    }
+
+
 def analises(request):
     # Mostra análise por período, por padrão vem o mes atual depois vem a lista de consumos dos 5 últimos meses em evolução gráfica
-    tags = Tag.objects.all()
-    return render(request, 'analises.html', {'tags': tags})
+    registros = []
+
+    # Período no input, por padrão mostra o mês atual
+    now = datetime.now()
+    last_month_day = calendar.monthrange(
+        now.year, now.month)[1]
+    periodo_query = (f'{now.year}-{str(now.month).zfill(2)}-01',
+                     f'{now.year}-{str(now.month).zfill(2)}-{str(last_month_day).zfill(2)}')
+    registros.append({
+        'periodo': {
+            'data_inicial': periodo_query[0],
+            'data_final': periodo_query[1]
+        },
+        'analise': get_dados_analises(
+            periodo_query[0], periodo_query[1], [])
+    })
+
+    # Avaliar os cinco últimos meses
+    periodos_avaliados = []
+    for i in range(5):
+        last_month = now.month-(i+1) if now.month > 1 else 12
+        last_month_year = now.year - 1 if last_month > now.month else now.year
+        last_month_day = calendar.monthrange(
+            last_month_year, last_month)[1]
+        periodo = (f'{last_month_year}-{str(last_month).zfill(2)}-01',
+                   f'{last_month_year}-{str(last_month).zfill(2)}-{str(last_month_day).zfill(2)}')
+        periodos_avaliados.append(periodo)
+    print(periodos_avaliados)
+
+    for data_inicial, data_final in periodos_avaliados:
+        registros.append({
+            'periodo': {
+                'data_inicial': data_inicial,
+                'data_final': data_final
+            },
+            'analise': get_dados_analises(data_inicial, data_final, [])
+        })
+
+    return render(request, 'analises.html', {'registros': registros})

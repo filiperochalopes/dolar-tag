@@ -93,23 +93,23 @@ main > section > section .item {
   display: inline;
 }
 
-#analise_registros h2 {
+#analise_registros h2, .analise_registros h2 {
   color: green;
 }
 
-#analise_registros h2.negativo {
+#analise_registros h2.negativo, .analise_registros h2.negativo {
   color: red;
 }
 
-#analise_registros h2 span {
+#analise_registros h2 span, .analise_registros h2 span {
   font-size: 12px;
 }
 
-#analise_registros h2 span:first-child {
+#analise_registros h2 span:first-child, .analise_registros h2 span:first-child {
   color: green;
 }
 
-#analise_registros h2 span:last-child {
+#analise_registros h2 span:last-child, .analise_registros h2 span:last-child {
   color: red;
 }
 
