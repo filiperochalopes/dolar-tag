@@ -276,7 +276,7 @@ def rest_registro(request, id):
     registro = None
     if(request.method == 'DELETE'):
         print(f'Excluindo Registro {id}')
-        registro = Registro.objects.filter(id=30)
+        registro = Registro.objects.filter(id=id)
         serialized_query = serializers.serialize('json', registro)
         registro.delete()
     return JsonResponse(serialized_query, safe=False)
