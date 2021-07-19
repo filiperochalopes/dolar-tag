@@ -3,3 +3,4 @@ psycopg2-binary
 django_compressor
 django-libsass
 django-sass
+python-dotenv

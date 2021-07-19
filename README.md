@@ -18,3 +18,9 @@ python manage.py makemigrations
 python manage.py sass contabilidade_residencial/core/static/scss/ contabilidade_residencial/core/static/css/ --watch
 python manage.py sass contabilidade_residencial/core/static/scss/ contabilidade_residencial/core/static/css/ -t compressed
 ```
+
+## Dump database
+
+```sh
+docker exec -it contabilidade_residencial_db /usr/src/dump_database.sh
+```
