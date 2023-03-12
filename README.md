@@ -1,4 +1,6 @@
-# Django Contabilidade Residencial
+# Dólar Tag v2
+
+Um projeto facilitar a análise de despesas, etiquetando cada transação de forma prática. Queremos saber para onde o dólar foi! Fiz em Django para estudar mais sobre e em português para facilitar a edição por parte de minha esposa, que está aprendendo python.
 
 ## Iniciando projeto
 ```sh
