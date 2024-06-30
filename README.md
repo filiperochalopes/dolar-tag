@@ -1,28 +1,17 @@
 # Dólar Tag v2
 
-Um projeto facilitar a análise de despesas, etiquetando cada transação de forma prática. Queremos saber para onde o dólar foi! Fiz em Django para estudar mais sobre e em português para facilitar a edição por parte de minha esposa, que está aprendendo python.
+Um projeto facilitar a análise de despesas, etiquetando cada transação de forma prática. Queremos saber para onde o dólar foi! A versão 2 está reformulada para atingir um MVP funcional de registro de despesas com Flask. 
 
-## Iniciando projeto
-```sh
-# Para rodar o pyenv, disponibilizando-o no shell
-source ~/.bashrc # Python 3.9.2
-python manage.py runserver 0.0.0.0:8000
-```
+A manipulação de usuários é dado por cli utilizando Typer
 
-## Comando importantes
-```sh
-# Criar migration atualizada com base nas classes
-python manage.py makemigrations
-```
+## Experimento ChatGPT
 
-## To watch/compile sass
-```sh
-python manage.py sass contabilidade_residencial/core/static/scss/ contabilidade_residencial/core/static/css/ --watch
-python manage.py sass contabilidade_residencial/core/static/scss/ contabilidade_residencial/core/static/css/ -t compressed
-```
+Para agilizar o processo, conhecendo dos frameworks utilizados, lancei mão do ChatGPT-4 para facilitar a construção desse MVP
 
-## Dump database
+A conversa pode ser [acessada nesse link](https://chatgpt.com/share/62ca6ff5-135c-4662-b08d-66d5b916992c)
+
+## Executando ambiente de desenvolvimento
 
 ```sh
-docker exec -it contabilidade_residencial_db /usr/src/dump_database.sh
+python run.py
 ```

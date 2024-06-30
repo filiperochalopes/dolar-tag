@@ -1,0 +1,18 @@
+{% extends "base.j2" %}
+
+{% block content %}
+    <h1>Welcome, {{ g.user.username }}</h1>
+    <form action="{{ url_for('add_record') }}" method="post">
+        Amount: <input type="text" name="amount"><br>
+        Tags: <input type="text" name="tags"><br>
+        <input type="submit" value="Add Record">
+    </form>
+    <h2>Records</h2>
+    <ul>
+        {% for record in records %}
+            <li>{{ record.timestamp }} - {{ record.amount }} - {{ record.tags|map(attribute='name')|join(', ') }}
+                <a href="{{ url_for('edit_record', id=record.id) }}">Edit</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

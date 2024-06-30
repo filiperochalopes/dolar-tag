@@ -1,29 +1,9 @@
-version: "3"
 services:
-  db:
-    container_name: contabilidade_residencial_db
-    restart: always
-    image: postgres
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
-      - ./scripts:/usr/src
-      - ./.env:/usr/src/.env
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "${POSTGRES_PORT}:5432"
-  djangoapp:
-    container_name: contabilidade_residencial_django
-    restart: always
+  web:
     build: .
-    volumes:
-      - ./contabilidade_residencial:/usr/src/app
-    environment:
-      - DJANGO_SETTINGS_MODULE=contabilidade_residencial.settings
     ports:
-      - "${DJANGO_APP_PORT}:8000"
-    command: python manage.py runserver 0.0.0.0:8000
-    depends_on:
-      - db
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development

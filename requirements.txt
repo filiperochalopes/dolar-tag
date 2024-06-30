@@ -1,6 +1,9 @@
-Django==3.1.7
-psycopg2-binary
-django_compressor
-django-libsass
-django-sass
+Flask
+SQLAlchemy
+Flask-Session
+Jinja2
+Flask-SQLAlchemy
+bcrypt
+gunicorn
+typer
 python-dotenv
