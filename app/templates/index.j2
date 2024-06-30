@@ -1,7 +1,7 @@
 {% extends "base.j2" %}
 
 {% block content %}
-    <h1>Welcome, {{ g.user.username }}</h1>
+    <h1>Olá {{ g.user.username }}</h1>
     <form action="{{ url_for('routes.add_record') }}" method="post">
         Amount: <input type="text" name="amount"><br>
         Description: <input type="text" name="description"><br>
@@ -11,7 +11,9 @@
     <h2>Records</h2>
     <ul>
         {% for record in records %}
-            <li>{{ record.created_at }} - {{ record.description }} - {{ record.amount }} - {{ record.tags|map(attribute='name')|join(', ') }}
+            <li>{{ record.created_at }} - {{ record.description }} - {{ record.amount }} - {% for tag in record.tags %}
+            <span style="background-color: {{ tag.color_hex }}">{{ tag.name }}</span>
+            {% endfor %}
                 <a href="{{ url_for('routes.edit_record', id=record.id) }}">Edit</a>
             </li>
         {% endfor %}
