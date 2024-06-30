@@ -38,6 +38,7 @@ def login():
         password = request.form["password"]
 
         user = User.query.filter_by(username=username).first()
+        print(user.__dict__)
         if user and check_password_hash(user.password, password):
             session["user_id"] = user.id
             return redirect(url_for("routes.index"))

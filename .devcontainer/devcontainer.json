@@ -23,7 +23,9 @@
 			"extensions": [
 				"ms-python.python", 
 				"ms-python.vscode-pylance-features", 
-				"codeium.codeium"
+				"codeium.codeium",
+				"wholroyd.jinja",
+				"glenn2223.live-sass"
 			]
 		}
 	}
