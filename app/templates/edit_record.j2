@@ -1,10 +1,14 @@
 {% extends "base.j2" %}
 
 {% block content %}
-    <h1>Edit Record</h1>
-    <form action="{{ url_for('edit_record', id=record.id) }}" method="post">
-        Amount: <input type="text" name="amount" value="{{ record.amount }}"><br>
-        Tags: <input type="text" name="tags" value="{{ tags }}"><br>
-        <input type="submit" value="Update Record">
-    </form>
+<h1>Edit Record</h1>
+<form action="{{ url_for('routes.edit_record', id=record.id) }}" method="post">
+    <label for="amount">Amount:</label>
+    <input type="text" name="amount" value="{{ record.amount }}"><br>
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" value="{{ record.description }}" required><br>
+    <label for="tags">Tags:</label>
+    <input type="text" name="tags" value="{{ tags }}"><br>
+    <input type="submit" value="Update Record">
+</form>
 {% endblock %}

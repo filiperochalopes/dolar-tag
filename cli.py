@@ -1,11 +1,12 @@
 import typer
 from app import create_app, db
 from app.models import User
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
 app = create_app()
 
 cli = typer.Typer()
+
 
 @cli.command()
 def create_user(username: str, password: str):
@@ -15,6 +16,7 @@ def create_user(username: str, password: str):
         db.session.add(new_user)
         db.session.commit()
         typer.echo(f"User {username} created successfully.")
+
 
 @cli.command()
 def update_user_password(username: str, new_password: str):
@@ -26,6 +28,7 @@ def update_user_password(username: str, new_password: str):
             typer.echo(f"Password for user {username} updated successfully.")
         else:
             typer.echo(f"User {username} not found.")
+
 
 if __name__ == "__main__":
     cli()

@@ -1,89 +1,105 @@
-from flask import render_template, request, redirect, url_for, session, g, flash, Blueprint
+from flask import (
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session,
+    g,
+    flash,
+    Blueprint,
+)
 from werkzeug.security import check_password_hash
 from . import db
 from .models import User, Record, Tag
-from app import create_app
 
-routes = Blueprint('routes', __name__)
+routes = Blueprint("routes", __name__)
+
 
 @routes.before_app_request
 def before_request():
     g.user = None
-    if 'user_id' in session:
-        g.user = User.query.get(session['user_id'])
+    if "user_id" in session:
+        g.user = User.query.get(session["user_id"])
 
-@routes.route('/')
+
+@routes.route("/")
 def index():
     if not g.user:
-        return redirect(url_for('routes.login'))
-    
-    records = Record.query.filter_by(user_id=g.user.id).all()
-    return render_template('index.html', records=records)
+        return redirect(url_for("routes.login"))
 
-@routes.route('/login', methods=['GET', 'POST'])
+    records = Record.query.filter_by(user_id=g.user.id).all()
+    return render_template("index.j2", records=records)
+
+
+@routes.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id
-            return redirect(url_for('routes.index'))
+            session["user_id"] = user.id
+            return redirect(url_for("routes.index"))
         else:
-            flash('Login Failed. Check your username and/or password.')
-    
-    return render_template('login.j2')
+            flash("Login Failed. Check your username and/or password.")
 
-@routes.route('/logout')
+    return render_template("login.j2")
+
+
+@routes.route("/logout")
 def logout():
-    session.pop('user_id', None)
-    return redirect(url_for('routes.login'))
+    session.pop("user_id", None)
+    return redirect(url_for("routes.login"))
 
-@routes.route('/add-record', methods=['POST'])
+
+@routes.route("/add-record", methods=["POST"])
 def add_record():
     if not g.user:
-        return redirect(url_for('routes.login'))
-    
-    amount = request.form['amount']
-    tags = request.form['tags'].split(',')
-    
-    new_record = Record(amount=amount, user_id=g.user.id)
+        return redirect(url_for("routes.login"))
+
+    amount = request.form["amount"]
+    description = request.form["description"]
+    tags = request.form["tags"].split(",")
+
+    new_record = Record(amount=amount, description=description, user_id=g.user.id)
     db.session.add(new_record)
     db.session.commit()
-    
+
     for tag_name in tags:
         tag = Tag.query.filter_by(name=tag_name.strip()).first()
         if not tag:
             tag = Tag(name=tag_name.strip())
         new_record.tags.append(tag)
-    
-    db.session.commit()
-    
-    return redirect(url_for('routes.index'))
 
-@routes.route('/edit-record/<int:id>', methods=['GET', 'POST'])
+    db.session.commit()
+
+    return redirect(url_for("routes.index"))
+
+
+@routes.route("/edit-record/<int:id>", methods=["GET", "POST"])
 def edit_record(id):
     if not g.user:
-        return redirect(url_for('routes.login'))
-    
+        return redirect(url_for("routes.login"))
+
     record = Record.query.get_or_404(id)
-    
-    if request.method == 'POST':
-        record.amount = request.form['amount']
+
+    if request.method == "POST":
+        record.amount = request.form["amount"]
+        record.description = request.form["description"]
         db.session.commit()
-        
+
         record.tags.clear()
-        tags = request.form['tags'].split(',')
-        
+        tags = request.form["tags"].split(",")
+
         for tag_name in tags:
             tag = Tag.query.filter_by(name=tag_name.strip()).first()
             if not tag:
                 tag = Tag(name=tag_name.strip())
             record.tags.append(tag)
-        
+
         db.session.commit()
-        return redirect(url_for('routes.index'))
-    
+        return redirect(url_for("routes.index"))
+
     tags = ", ".join([tag.name for tag in record.tags])
-    return render_template('edit_record.html', record=record, tags=tags)
+    return render_template("edit_record.j2", record=record, tags=tags)

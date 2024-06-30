@@ -3,6 +3,7 @@ SQLAlchemy
 Flask-Session
 Jinja2
 Flask-SQLAlchemy
+Flask-Migrate
 bcrypt
 gunicorn
 typer
