@@ -20,7 +20,4 @@ def create_app():
 
     app.register_blueprint(routes)
 
-    with app.app_context():
-        db.create_all()
-
     return app

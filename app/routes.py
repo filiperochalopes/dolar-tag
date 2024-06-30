@@ -38,7 +38,6 @@ def login():
         password = request.form["password"]
 
         user = User.query.filter_by(username=username).first()
-        print(user.__dict__)
         if user and check_password_hash(user.password, password):
             session["user_id"] = user.id
             return redirect(url_for("routes.index"))
@@ -61,9 +60,10 @@ def add_record():
 
     amount = request.form["amount"]
     description = request.form["description"]
+    date = request.form["date"]
     tags = request.form["tags"].split(",")
 
-    new_record = Record(amount=amount, description=description, user_id=g.user.id)
+    new_record = Record(amount=amount, description=description, date=date, user_id=g.user.id)
     db.session.add(new_record)
     db.session.commit()
 
@@ -88,6 +88,7 @@ def edit_record(id):
     if request.method == "POST":
         record.amount = request.form["amount"]
         record.description = request.form["description"]
+        record.date = request.form["date"]
         db.session.commit()
 
         record.tags.clear()
