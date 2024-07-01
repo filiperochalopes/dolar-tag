@@ -13,6 +13,7 @@ A conversa pode ser [acessada nesse link](https://chatgpt.com/share/62ca6ff5-135
 ## Executando ambiente de desenvolvimento
 
 ```sh
-flask db upgrade
 python run.py
+flask db upgrade
+python cli.py create-user username password
 ```
