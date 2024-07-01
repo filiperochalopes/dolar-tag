@@ -1,16 +1,19 @@
+import datetime
+
 from flask import (
+    Blueprint,
+    flash,
+    g,
+    redirect,
     render_template,
     request,
-    redirect,
-    url_for,
     session,
-    g,
-    flash,
-    Blueprint,
+    url_for,
 )
 from werkzeug.security import check_password_hash
+
 from . import db
-from .models import User, Record, Tag
+from .models import Record, Tag, User
 
 routes = Blueprint("routes", __name__)
 
@@ -28,7 +31,7 @@ def index():
         return redirect(url_for("routes.login"))
 
     records = Record.query.filter_by(user_id=g.user.id).all()
-    return render_template("index.j2", records=records)
+    return render_template("index.html.j2", records=records)
 
 
 @routes.route("/login", methods=["GET", "POST"])
@@ -44,7 +47,7 @@ def login():
         else:
             flash("Login Failed. Check your username and/or password.")
 
-    return render_template("login.j2")
+    return render_template("login.html.j2")
 
 
 @routes.route("/logout")
@@ -60,10 +63,12 @@ def add_record():
 
     amount = request.form["amount"]
     description = request.form["description"]
-    date = request.form["date"]
+    date = datetime.date.fromisoformat(request.form["date"])
     tags = request.form["tags"].split(",")
 
-    new_record = Record(amount=amount, description=description, date=date, user_id=g.user.id)
+    new_record = Record(
+        amount=amount, description=description, date=date, user_id=g.user.id
+    )
     db.session.add(new_record)
     db.session.commit()
 
@@ -88,7 +93,7 @@ def edit_record(id):
     if request.method == "POST":
         record.amount = request.form["amount"]
         record.description = request.form["description"]
-        record.date = request.form["date"]
+        record.date = datetime.date.fromisoformat(request.form["date"])
         db.session.commit()
 
         record.tags.clear()
@@ -104,4 +109,4 @@ def edit_record(id):
         return redirect(url_for("routes.index"))
 
     tags = ", ".join([tag.name for tag in record.tags])
-    return render_template("edit_record.j2", record=record, tags=tags)
+    return render_template("edit_record.html.j2", record=record, tags=tags)

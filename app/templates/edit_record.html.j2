@@ -1,10 +1,10 @@
-{% extends "base.j2" %}
+{% extends "base.html.j2" %}
 
 {% block content %}
 <h1>Edit Record</h1>
 <form action="{{ url_for('routes.edit_record', id=record.id) }}" method="post">
     <label for="amount">Valor:</label>
-    <input type="float" name="amount" value="{{ record.amount }}" step="0.01"><br>
+    <input type="number" name="amount" value="{{ record.amount }}" step="0.01"><br>
     <label for="description">Description:</label>
     <input type="text" id="description" name="description" value="{{ record.description }}" required><br>
     <label for="date">Date:</label>

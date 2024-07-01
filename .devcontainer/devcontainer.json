@@ -24,7 +24,8 @@
 				"ms-python.python", 
 				"ms-python.vscode-pylance-features", 
 				"codeium.codeium",
-				"wholroyd.jinja",
+				"charliermarsh.ruff",
+				"samuelcolvin.jinjahtml",
 				"glenn2223.live-sass"
 			]
 		}

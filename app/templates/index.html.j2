@@ -1,9 +1,9 @@
-{% extends "base.j2" %}
+{% extends "base.html.j2" %}
 
 {% block content %}
     <h1>Olá {{ g.user.username }}</h1>
     <form action="{{ url_for('routes.add_record') }}" method="post">
-        Valor: <input type="float" name="amount" step="0.01"><br>
+        Valor: <input type="number" name="amount" step="0.01"><br>
         Descrição: <input type="text" name="description"><br>
         Data: <input type="date" name="date"><br>
         Tags (separe as tags por vírgulas se for mais de uma): <input type="text" name="tags"><br>
@@ -12,10 +12,10 @@
     <h2>Records</h2>
     <ul>
         {% for record in records %}
-            <li>{{ record.date }} - {{ record.description }} - {{ record.amount }} - {% for tag in record.tags %}
+            <li>{{ record.date.strftime('%d/%m/%Y') }} - {{ record.description }} - {{ record.amount }} - {% for tag in record.tags %}
             <span style="background-color: {{ tag.color_hex }}">{{ tag.name }}</span>
-            {% endfor %}
-                <a href="{{ url_for('routes.edit_record', id=record.id) }}">Edit</a>
+        {% endfor %}
+                <a href="{{ url_for('routes.edit_record', id=record.id) }}">Editar</a>
             </li>
         {% endfor %}
     </ul>

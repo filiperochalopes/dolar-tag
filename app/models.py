@@ -26,9 +26,7 @@ class Record(db.Model):
     amount = db.Column(db.Float, nullable=False)
     description = db.Column(db.String(255), nullable=False)
     date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
-    created_at = db.Column(
-        db.DateTime, nullable=False, default=datetime.utcnow
-    )
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(
         db.DateTime,
         nullable=False,
