@@ -30,7 +30,7 @@ def index():
     if not g.user:
         return redirect(url_for("routes.login"))
 
-    records = Record.query.filter_by(user_id=g.user.id).all()
+    records = Record.query.all()
     return render_template("index.html.j2", records=records)
 
 
