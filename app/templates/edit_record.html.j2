@@ -8,7 +8,7 @@
     <label for="description">Description:</label>
     <input type="text" id="description" name="description" value="{{ record.description }}" required><br>
     <label for="date">Date:</label>
-    <input type="date" id="date" name="date" value="{{ record.date|strftime('%Y-%m-%d') }}" required><br>
+    <input type="date" id="date" name="date" value="{{ record.date.strftime('%Y-%m-%d') }}" required><br>
     <label for="tags">Tags:</label>
     <input type="text" name="tags" value="{{ tags }}"><br>
     <input type="submit" value="Update Record">
