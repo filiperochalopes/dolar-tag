@@ -1,22 +1,37 @@
 {% extends "base.html.j2" %}
 
 {% block content %}
-    <h1>Olá {{ g.user.username }}</h1>
-    <form action="{{ url_for('routes.add_record') }}" method="post">
-        Valor: <input type="number" name="amount" step="0.01"><br>
-        Descrição: <input type="text" name="description"><br>
-        Data: <input type="date" name="date"><br>
-        Tags (separe as tags por vírgulas se for mais de uma): <input type="text" name="tags"><br>
-        <input type="submit" value="Add Record">
-    </form>
-    <h2>Records</h2>
+<h1>Olá {{ g.user.username }}</h1>
+<form action="{{ url_for('routes.add_record') }}" method="post">
+    Valor: <input type="number" name="amount" step="0.01"><br>
+    Descrição: <input type="text" name="description"><br>
+    Data: <input type="date" name="date"><br>
+    Tags (separe as tags por vírgulas se for mais de uma): <input type="text" name="tags"><br>
+    <input type="submit" value="Adicionar Registro">
+</form>
+<h2>Filtro</h2>
+<form action="{{ url_for('routes.index') }}" method="get">
+    De: <input type="date" name="date_start"> a <input type="date" name="date_end"><br>
+    Tags: <input type="text" name="tags"><br>
+    <input type="submit" value="Filter">
+</form>
+<h2>Registros</h2>
+{% if sum %}
+<strong>Soma: R$ {{ "%.2f"|format(sum) }}</strong>
+<br/><br/>
+{% endif %}
+{% if records|length <= 0 %} <p>Não ha registros.</p>
+    {% endif %}
+    {% if records|length > 0 %}
     <ul>
         {% for record in records %}
-            <li>{{ record.date.strftime('%d/%m/%Y') }} - {{ record.description }} - {{ record.amount }} - {% for tag in record.tags %}
+        <li>{{ record.date.strftime('%d/%m/%Y') }} - {{ record.description }} - {{ record.amount }} - {% for tag in
+            record.tags %}
             <span style="background-color: {{ tag.color_hex }}">{{ tag.name }}</span>
-        {% endfor %}
-                <a href="{{ url_for('routes.edit_record', id=record.id) }}">Editar</a>
-            </li>
+            {% endfor %}
+            <a href="{{ url_for('routes.edit_record', id=record.id) }}">Editar</a>
+        </li>
         {% endfor %}
     </ul>
-{% endblock %}
+    {% endif %}
+    {% endblock %}

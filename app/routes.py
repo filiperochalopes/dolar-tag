@@ -30,8 +30,24 @@ def index():
     if not g.user:
         return redirect(url_for("routes.login"))
 
-    records = Record.query.all()
-    return render_template("index.html.j2", records=records)
+    # argumentos esperados
+    date_start = request.args.get("date_start")
+    date_end = request.args.get("date_end")
+    tags = request.args.get("tags") 
+
+    records = db.session.query(Record)
+    # filtrando por data e tags caso esteja presente
+    if date_start and date_end:  
+        print("Filtrando por data...")  
+        records = records.filter(Record.date.between(date_start, date_end))
+    if tags:
+        print("Filtrando por tags...")
+        tags = [tag.strip() for tag in tags.split(",")]
+        records = records.filter(Record.tags.any(Tag.name.in_(tags)))
+    records = records.order_by(Record.date.desc()).all()
+    # somando todos os valores de registros
+    records_sum = sum([record.amount for record in records])
+    return render_template("index.html.j2", records=records, sum=records_sum)
 
 
 @routes.route("/login", methods=["GET", "POST"])

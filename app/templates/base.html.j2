@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Despesas e Investimentos</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
+
 <body>
     <header>
         <nav>
             {% if g.user %}
-                <a href="{{ url_for('routes.index') }}">Home</a>
-                <a href="{{ url_for('routes.logout') }}">Logout</a>
+            <a href="{{ url_for('routes.index') }}">Home</a>
+            <a href="{{ url_for('routes.logout') }}">Logout</a>
             {% else %}
-                <a href="{{ url_for('routes.login') }}">Login</a>
+            <a href="{{ url_for('routes.login') }}">Login</a>
             {% endif %}
         </nav>
     </header>
@@ -20,4 +22,5 @@
         {% block content %}{% endblock %}
     </main>
 </body>
+
 </html>
