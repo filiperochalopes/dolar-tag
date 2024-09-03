@@ -34,6 +34,7 @@ def index():
     date_start = request.args.get("date_start")
     date_end = request.args.get("date_end")
     tags = request.args.get("tags") 
+    cash_in_out = request.args.get("cash_in_out")
 
     records = db.session.query(Record)
     # filtrando por data e tags caso esteja presente
@@ -44,6 +45,13 @@ def index():
         print("Filtrando por tags...")
         tags = [tag.strip() for tag in tags.split(",")]
         records = records.filter(Record.tags.any(Tag.name.in_(tags)))
+    
+    # Filtrando por entradas e saídas
+    if cash_in_out == "entradas":
+        records = records.filter(Record.amount > 0)
+    elif cash_in_out == "saidas":
+        records = records.filter(Record.amount < 0)
+
     records = records.order_by(Record.date.desc()).all()
     # somando todos os valores de registros
     records_sum = sum([record.amount for record in records])

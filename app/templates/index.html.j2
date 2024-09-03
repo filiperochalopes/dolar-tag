@@ -18,6 +18,12 @@
 <form action="{{ url_for('routes.index') }}" method="get">
     De: <input type="date" name="date_start"> a <input type="date" name="date_end"><br>
     Tags: <input type="text" name="tags"><br>
+    Cash in/out:
+    <select name="cash_in_out">
+        <option value="">Todos</option>
+        <option value="entradas">Entradas</option>
+        <option value="saidas">Saídas</option>
+    </select><br/>
     <input type="submit" value="Filter">
 </form>
 <h2>Registros</h2>
