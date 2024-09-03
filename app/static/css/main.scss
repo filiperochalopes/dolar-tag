@@ -26,4 +26,16 @@ main {
 
 form {
     margin-bottom: 20px;
+
+    select#type {
+        background-color: #fff; /* Cor padrão */
+
+        &.saida {
+            background-color: #ff8080;
+        }
+
+        &.entrada {
+            background-color: #80ff80;
+        }
+    }
 }

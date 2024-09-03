@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   margin: 0;
   padding: 0;
@@ -25,4 +26,13 @@ main {
 
 form {
   margin-bottom: 20px;
+}
+form select#type {
+  background-color: #fff; /* Cor padrão */
+}
+form select#type.saida {
+  background-color: #ff8080;
+}
+form select#type.entrada {
+  background-color: #80ff80;
 }/*# sourceMappingURL=main.css.map */

@@ -3,8 +3,13 @@
 {% block content %}
 <h1>Edit Record</h1>
 <form action="{{ url_for('routes.edit_record', id=record.id) }}" method="post">
+    <label for="type">Tipo:</label>
+    <select name="type" id="type">
+        <option value="entrada" {% if record.amount>= 0 %}selected{% endif %}>Entrada</option>
+        <option value="saida" {% if record.amount < 0 %}selected{% endif %}>Saída</option>
+    </select><br>
     <label for="amount">Valor:</label>
-    <input type="number" name="amount" value="{{ record.amount }}" step="0.01"><br>
+    <input type="number" name="amount" value="{{ record.amount|abs }}" step="0.01"><br>
     <label for="description">Description:</label>
     <input type="text" id="description" name="description" value="{{ record.description }}" required><br>
     <label for="date">Date:</label>

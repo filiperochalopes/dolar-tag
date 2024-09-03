@@ -3,6 +3,11 @@
 {% block content %}
 <h1>Olá {{ g.user.username }}</h1>
 <form action="{{ url_for('routes.add_record') }}" method="post">
+    Tipo:
+    <select name="type" id="type">
+        <option value="entrada">Entrada</option>
+        <option value="saida" selected>Saída</option>
+    </select><br>
     Valor: <input type="number" name="amount" step="0.01"><br>
     Descrição: <input type="text" name="description"><br>
     Data: <input type="date" name="date"><br>
@@ -18,14 +23,14 @@
 <h2>Registros</h2>
 {% if sum %}
 <strong>Soma: R$ {{ "%.2f"|format(sum) }}</strong>
-<br/><br/>
+<br /><br />
 {% endif %}
 {% if records|length <= 0 %} <p>Não ha registros.</p>
     {% endif %}
     {% if records|length > 0 %}
     <ul>
         {% for record in records %}
-        <li>{{ record.date.strftime('%d/%m/%Y') }} - {{ record.description }} - {{ record.amount }} - {% for tag in
+        <li>{{ record.date.strftime('%d/%m/%Y') }} - {{ record.description }} - R$ {{ record.amount }} - {% for tag in
             record.tags %}
             <span style="background-color: {{ tag.color_hex }}">{{ tag.name }}</span>
             {% endfor %}

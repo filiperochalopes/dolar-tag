@@ -77,7 +77,10 @@ def add_record():
     if not g.user:
         return redirect(url_for("routes.login"))
 
+    amount_type = request.form["type"]
     amount = request.form["amount"]
+    if amount_type == "saida":
+        amount = -float(amount)
     description = request.form["description"]
     date = datetime.date.fromisoformat(request.form["date"])
     tags = request.form["tags"].split(",")
@@ -107,7 +110,11 @@ def edit_record(id):
     record = Record.query.get_or_404(id)
 
     if request.method == "POST":
-        record.amount = request.form["amount"]
+        amount_type = request.form["type"]
+        amount = request.form["amount"]
+        if amount_type == "saida":
+            amount = -float(amount)
+        record.amount = amount
         record.description = request.form["description"]
         record.date = datetime.date.fromisoformat(request.form["date"])
         db.session.commit()
